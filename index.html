@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Valentine?</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+            overflow: hidden;
+            touch-action: none;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+        #no-btn {
+            transition: all 0.2s ease;
+            z-index: 50;
+        }
+        #video-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        video {
+            max-width: 100%;
+            max-height: 100%;
+        }
+    </style>
+</head>
+<body class="h-screen flex items-center justify-center p-4">
+
+    <!-- Proposal Card -->
+    <div id="main-card" class="glass-card rounded-3xl p-8 max-w-sm w-full text-center text-white space-y-6">
+        <div class="flex justify-center">
+            <div class="w-24 h-24 rounded-full border-4 border-white overflow-hidden bg-pink-200 flex items-center justify-center">
+                <!-- User Profile Placeholder -->
+                <span class="text-4xl">SS</span>
+            </div>
+        </div>
+        
+        <h1 class="text-3xl font-bold">Hey Girl ❤️</h1>
+        
+        <p class="text-lg opacity-90">
+            Every smile of yours feels like home. Every moment with you feels like magic. And today... I just have one important question.
+        </p>
+        
+        <h2 class="text-xl font-semibold italic">Will you be my Valentine?</h2>
+
+        <div class="flex justify-center gap-4 relative h-16 mt-4">
+            <button id="yes-btn" class="bg-rose-500 hover:bg-rose-600 text-white font-bold py-2 px-8 rounded-full shadow-lg transform active:scale-95 transition-all">
+                Yes 💖
+            </button>
+            <button id="no-btn" class="bg-gray-600 text-white font-bold py-2 px-8 rounded-full shadow-lg">
+                No 💔
+            </button>
+        </div>
+    </div>
+
+    <!-- Prank Video Overlay -->
+    <div id="video-overlay">
+        <!-- We use the filename provided. Ensure the video file is in the same folder -->
+        <video id="prank-video" playsinline>
+            <source src="VID-20260209-WA0002.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <button id="close-video" class="absolute top-4 right-4 text-white text-4xl font-bold">&times;</button>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('no-btn');
+        const yesBtn = document.getElementById('yes-btn');
+        const mainCard = document.getElementById('main-card');
+        const overlay = document.getElementById('video-overlay');
+        const video = document.getElementById('prank-video');
+        const closeBtn = document.getElementById('close-video');
+
+        // Dodging logic for the No button
+        const moveButton = () => {
+            const maxX = window.innerWidth - noBtn.offsetWidth - 20;
+            const maxY = window.innerHeight - noBtn.offsetHeight - 20;
+            
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+        };
+
+        noBtn.addEventListener('mouseover', moveButton);
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            moveButton();
+        });
+
+        // Click logic for the Yes button
+        yesBtn.addEventListener('click', () => {
+            overlay.style.display = 'flex';
+            video.play().catch(error => {
+                console.log("Video play failed:", error);
+                // Some browsers block auto-play without user interaction
+            });
+        });
+
+        // Close video button
+        closeBtn.addEventListener('click', () => {
+            video.pause();
+            video.currentTime = 0;
+            overlay.style.display = 'none';
+        });
+    </script>
+</body>
+</html>
